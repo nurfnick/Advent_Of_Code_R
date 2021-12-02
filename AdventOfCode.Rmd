@@ -1,0 +1,45 @@
+---
+title: "Advent Of Code 2021 R"
+author: "Nicholas Jacob"
+date: "12/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(tidyverse)
+library(rvest)
+```
+
+## Day 1
+
+I'd like to try this challenge.  I at least caught it on the first day so let's see how it goes.  First I'll read in the data from the very first challenge.
+
+We are supposed to compute how many increases there are from one to the next.
+
+```{r}
+df <- read.csv('inputDay1',header = FALSE)
+
+counter <- 0
+for (i in 2:length(df$V1)){
+  if (df$V1[i]>df$V1[i-1]) counter = counter + 1
+}
+
+counter
+```
+
+for the second challenge of the day, I need to consider the sum of three measurements and then see if those are increasing or not.
+
+```{r}
+df2 <- df$V1[1:1998]+df$V1[2:1999]+df$V1[3:2000]
+
+counter <- 0
+for (i in 2:length(df2)){
+  if (df2[i]>df2[i-1]) counter = counter + 1
+}
+
+counter
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
