@@ -10,11 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(tidyverse)
 library(rvest)
+library(stringr)
 ```
 
 ## Day 1
 
-I'd like to try this challenge.  I at least caught it on the first day so let's see how it goes.  First I'll read in the data from the very first challenge.
+I'd like to try this challenge https://adventofcode.com/2021.  I at least caught it on the first day so let's see how it goes.  First I'll read in the data from the very first challenge.
 
 We are supposed to compute how many increases there are from one to the next.
 
@@ -27,6 +28,7 @@ for (i in 2:length(df$V1)){
 }
 
 counter
+
 ```
 
 for the second challenge of the day, I need to consider the sum of three measurements and then see if those are increasing or not.
@@ -42,4 +44,35 @@ for (i in 2:length(df2)){
 counter
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Day 2
+
+Figure out where your ship has gone!
+```{r}
+df <- read.csv('day2input',header = FALSE)
+
+depth <- 0
+horizontal <- 0
+
+for (entry in df$V1){
+  if (grepl('forward', entry, fixed = TRUE)) horizontal = horizontal + as.numeric(str_sub(entry,-1,-1))
+  else if (grepl('down', entry, fixed = TRUE)) depth = depth + as.numeric(str_sub(entry,-1,-1))
+  else if (grepl('up', entry, fixed = TRUE)) depth = depth - as.numeric(str_sub(entry,-1,-1))
+}
+
+depth*horizontal
+```
+Second part is confusing!
+```{r}
+
+depth <- 0
+horizontal <- 0
+aim <- 0
+
+for (entry in df$V1){
+  if (grepl('forward', entry, fixed = TRUE)) {horizontal = horizontal + as.numeric(str_sub(entry,-1,-1)) ;
+  depth = depth + aim*as.numeric(str_sub(entry,-1,-1))}
+  else if (grepl('down', entry, fixed = TRUE)) aim = aim + as.numeric(str_sub(entry,-1,-1))
+  else if (grepl('up', entry, fixed = TRUE)) aim = aim - as.numeric(str_sub(entry,-1,-1))
+}
+depth*horizontal
+```
