@@ -131,3 +131,50 @@ for(i in 1:12){
 }
 sum2*sum1
 ```
+
+Now for part 2 of Day 3.  I need to find the most common bit and then keep only the numbers with that bit.  I'll repeat that process until only one number is left.
+
+```{r}
+list = df3$V1
+
+for (i in 1:12){
+  if (mean(as.numeric(str_sub(list,i,i)))>=0.5){
+    list = list[ str_sub(list,i,i)== 1]
+  }
+  else {
+    list = list[ str_sub(list,i,i)== 0]
+  }
+}
+oxygen <- list
+```
+
+```{r}
+list = df3$V1
+
+for (i in 1:12){
+  if (length(list)>1){
+  if (mean(as.numeric(str_sub(list,i,i))) >=0.5){
+    list = list[ str_sub(list,i,i) == 0]
+  }
+  else {
+    list = list[ str_sub(list,i,i)== 1]
+  }}
+}
+CO <- list
+```
+
+```{r}
+sum1 = 0
+for(i in 1:12){
+  sum1 = sum1 + as.numeric(str_sub(oxygen,13-i,13-i))*2**(i-1)
+}
+
+
+sum2 = 0
+for(i in 1:12){
+  sum2 = sum2 + as.numeric(str_sub(CO,13-i,13-i))*2**(i-1)
+}
+sum2*sum1
+1025264
+1003024
+```

@@ -3,7 +3,7 @@
     "path": "~/GitHub/Advent_Of_Code_R/AdventOfCode.Rmd",
     "project_path": null,
     "type": "r_markdown",
-    "hash": "58502937",
+    "hash": "2928985413",
     "contents": "",
     "dirty": false,
     "created": 1638554251817.0,
@@ -12,16 +12,16 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "132,3",
-        "scrollLine": "106",
+        "cursorPosition": "140,43",
+        "scrollLine": "132",
         "last_setup_crc32": "F08DD9ECcabc75ec"
     },
     "folds": "",
-    "lastKnownWriteTime": 1638556323,
+    "lastKnownWriteTime": 1638562259,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1638556323593,
+    "last_content_update": 1638562259265,
     "read_only": false,
     "read_only_alternatives": []
 }
