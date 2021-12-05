@@ -178,3 +178,133 @@ sum2*sum1
 1025264
 1003024
 ```
+
+## Day 4
+
+This input is a little different with two parts, the calls for bingo and the cards.  I'll need to figure out how to deal with that.
+
+```{r}
+df4 <- read.csv('Day4input',header = F)
+head(df4,10)
+```
+
+I am going to read the first row as a single list.
+```{r}
+calls <- as.vector(as.numeric(df4[1,]))
+calls
+boards <- as.vector(df4[2:501,1])
+
+first <- as.numeric(str_sub(boards,1,2))
+second <- as.numeric(str_sub(boards,4,5))
+third <- as.numeric(str_sub(boards,7,8))
+fourth <- as.numeric(str_sub(boards,10,11))
+fifth <- as.numeric(str_sub(boards,13,14))
+
+
+
+boards <- data.frame(first,second,third,fourth,fifth)
+boards
+```
+
+Let's write a function that checks if you get a bingo horizontally.
+
+```{r}
+vertical_check <- function(singleBoard, call){
+  for (i in 1:5){
+    if (all(singleBoard[[i]] %in% call)){
+      return(TRUE)
+    }}
+  return(FALSE)
+}
+
+vertical_check(boards[1:5,],c(83,30,53,64,26,1))
+```
+
+```{r}
+horizontal_check <- function(singleBoard, call){
+  for (i in 1:5){
+    if (all(singleBoard[i,] %in% call)){
+      return(TRUE)
+    }}
+  return(FALSE)
+}
+b <- boards[1:5,]
+horizontal_check(b,c(83,11,47,61,2))
+```
+
+```{r}
+getRemainingValues <- function(singleBoard, call){
+  vals = as.vector(unlist(singleBoard))
+  return(sum(vals[!(vals %in% call)]))
+}
+getRemainingValues(b,c(83,11,47,61,2))
+sum(as.vector(unlist(b))[!(as.vector(unlist(b)) %in% c(83,11,47,61,2))])
+```
+
+```{r}
+checkAllBoards <- function(allBoards,call){
+ for (i in 1:100){
+   start <- (5*(i-1)+1)
+   stop <- 5*i
+   if (horizontal_check(allBoards[start:stop,],call) | vertical_check(allBoards[start:stop,],call) )
+     return(getRemainingValues(allBoards[start:stop,],call))
+ } 
+  return(0)
+}
+
+checkAllBoards(boards,c(83,30,53,64,26,1))
+
+```
+
+```{r}
+i = 5
+list <- calls[1:5]
+while (checkAllBoards(boards,list)==0){
+  i = i+1
+  list <- c(list,calls[i])
+}
+
+checkAllBoards(boards,list)*list[i]
+```
+
+```{r}
+checkAllBoards2 <- function(allBoards,call,notYetWon){
+ for (i in notYetWon){
+   start = (5*(i-1)+1)
+   stop = 5*i
+   if (horizontal_check(allBoards[start:stop,],call) | vertical_check(allBoards[start:stop,],call) )
+     return(i)
+ } 
+  return(0)
+}
+```
+
+```{r}
+losers <- c(1:100)
+list <- calls[1:2]
+i = 2
+while (length(losers)>1){
+  while(checkAllBoards2(boards,list,losers)!=0){
+    losers <- losers[!(losers %in% checkAllBoards2(boards,list,losers))]
+  }
+  i = i+1
+  list <- c(list,calls[i])
+  losers <- losers[!(losers %in% checkAllBoards2(boards,list,losers))]
+}
+
+losers
+i
+
+
+```
+The last board to win is number 85.  Let's see when it finally wins!
+
+```{r}
+while (checkAllBoards2(boards,list,losers)==0){
+  i = i+1
+  list <- c(list,calls[i])
+}
+start <- (5*(85-1)+1)
+stop <- 5*85
+getRemainingValues(boards[start:stop,],list)*list[i]
+```
