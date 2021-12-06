@@ -488,3 +488,92 @@ allThePointsWithN[allThePointsWithN$N>1]
 ```{r}
 180512-161398
 ```
+
+## Day 6 Exponential Growth
+
+No data cleaning necessary today!
+```{r}
+df6 <- read.csv('Day6Input',header = F)
+df6 <- as.vector(unlist(df6))
+```
+
+```{r}
+lookForZero <- function(dataList){
+  n <- length(dataList[dataList == 0])
+  return(n)
+}
+
+changeZero <- function(dataList){
+  dataList[dataList == 0] = 7
+  return(dataList)
+}
+
+addNewFish <- function(dataList,n){
+  dataList <- append(dataList,rep(9,n))
+  return(dataList)
+}
+
+lowerCounter <- function(dataList){
+  dataList <- dataList-1
+  return(dataList)
+}
+```
+
+```{r}
+n = 0
+df6 <- lowerCounter(df6)
+for (i in 1:79){
+  n <- lookForZero(df6)
+  df6 <- changeZero(df6)
+  df6 <- addNewFish(df6,n)
+  df6 <- lowerCounter(df6)
+}
+
+length(df6)
+
+```
+
+For the second part, we are supposed to go up to 256 days.  That filled my memory if I tried to run it with this code.  It is clearly not necessary to track each fish but only how many reproduce on what day.  Let's try that.
+
+First I'll initialize by counting how many fish are on each day's cycle
+```{r}
+df6 <- read.csv('Day6Input',header = F)
+df6 <- as.vector(unlist(df6))
+
+num8 = 0
+num7 = 0
+num6 = length(df6[df6 == 6])
+num5 = length(df6[df6 == 5])
+num4 = length(df6[df6 == 4])
+num3 = length(df6[df6 == 3])
+num2 = length(df6[df6 == 2])
+num1 = length(df6[df6 == 1])
+num0 = length(df6[df6 == 0])
+
+currentDay = c(num0,num1,num2,num3,num4,num5,num6,num7,num8)
+
+moveToNextDay <-function(currentDay){
+  newDay <- c()
+  newDay[9] = currentDay[1]
+  newDay[8] = currentDay[9]
+  newDay[7] = currentDay[8] + currentDay[1]
+  newDay[6] = currentDay[7]
+  newDay[5] = currentDay[6]
+  newDay[4] = currentDay[5]
+  newDay[3] = currentDay[4]
+  newDay[2] = currentDay[3]
+  newDay[1] = currentDay[2]
+  return(newDay)
+}
+currentDay
+moveToNextDay(moveToNextDay(currentDay))
+```
+
+```{r}
+for (i in 1:256){
+  currentDay <- moveToNextDay(currentDay)
+}
+options("scipen"=100, "digits"=4)
+sum(currentDay)
+```
+
