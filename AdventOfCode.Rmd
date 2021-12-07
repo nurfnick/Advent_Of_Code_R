@@ -576,4 +576,44 @@ for (i in 1:256){
 options("scipen"=100, "digits"=4)
 sum(currentDay)
 ```
+## Day 7 Shortest Distance
 
+No data cleaning necessary today!
+```{r}
+df7 <- read.csv('Day7Input',header = F)
+df7 <- as.vector(unlist(df7))
+head(df7,100)
+
+```
+I am supposed to find the best point for which all the differences are the smallest.
+```{r}
+list7 <- c()
+for (i in 0:2000){
+  val <- sum(abs(df7 - i))
+  list7 <- append(list7,val)
+}
+min(list7)
+```
+
+For the second part, I must do that the fuel costs increase as 1+2+3+4 for a 4 step move.  Let's see if we can get a function that will do this.
+
+```{r}
+twoStep <- function(intNum){
+  return(intNum*(intNum+1)/2)
+}
+
+twoStep(4)
+```
+
+Here I am using the fact that
+$$
+\sum_{i=1}^n i = \frac{n(n+1)}{2}
+$$
+```{r}
+list7 <- c()
+for (i in 0:2000){
+  val <- sum(twoStep(abs(df7 - i)))
+  list7 <- append(list7,val)
+}
+min(list7)
+```
