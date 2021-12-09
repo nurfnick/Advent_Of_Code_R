@@ -617,3 +617,113 @@ for (i in 0:2000){
 }
 min(list7)
 ```
+
+## Day 8 Decoding a Lost Signal
+
+```{r}
+df8 <- read.csv('Day8Input',header = F,sep = " ")
+output <- df8[c('V12','V13','V14','V15')]
+output
+```
+
+```{r}
+
+total <- 0
+
+for (i in c(2,3,4,7)){
+  for (k in c('V12','V13','V14','V15')){
+    total <- total + sum(nchar(output[,k]) == i)    
+  }
+}
+
+total
+```
+
+```{r}
+findEasy <- function(row){
+  newrow = c(rep('a',10),as.vector(unlist(row)))
+  for (i in row){
+    if (nchar(i) == 2){
+      newrow[which(newrow == i)] = 1
+      newrow[1] = i
+    }
+    else if (nchar(i) == 3){
+      newrow[which(newrow == i)] = 7
+      newrow[7] = i
+    }
+    else if (nchar(i) == 4){
+      newrow[which(newrow == i)] = 4
+      newrow[4] = i
+    }
+    else if (nchar(i) == 7){
+      newrow[which(newrow == i)] = 8
+      newrow[8] = i
+    }
+  }
+  return(newrow)
+}
+
+test = findEasy(df8[1,])
+```
+
+```{r}
+findLength5 <- function(newrow){
+  fourwithout1 <- newrow[4] %>% str_remove(str_sub(newrow[1],1,1)) %>% str_remove(str_sub(newrow[1],2,2))
+  for (i in newrow[11:25]){
+    if (nchar(i)==5){
+      if (str_detect(i,str_sub(newrow[1],1,1))&str_detect(i,str_sub(newrow[1],2,2))){
+        newrow[which(newrow == i)] = 3
+        newrow[3] = i
+      }
+      else if (str_detect(i,str_sub(fourwithout1,1,1))&str_detect(i,str_sub(fourwithout1,2,2))){
+        newrow[which(newrow == i)] = 5
+        newrow[5] = i
+      }
+      else {
+        newrow[which(newrow == i)] = 2
+        newrow[2] = i
+      }
+    }
+  }
+  return(newrow)
+}
+test
+str_detect(test[14],str_sub(test[1],1,1))&str_detect(test[14],str_sub(test[1],2,2))
+
+test <- findLength5(test)
+```
+
+```{r}
+findLength6 <- function(newrow){
+  fourwithout1 <- newrow[4] %>% str_remove(str_sub(newrow[1],1,1)) %>% str_remove(str_sub(newrow[1],2,2))
+  for (i in newrow[11:25]){
+     if (nchar(i)==6){
+    if (!(str_detect(i,str_sub(fourwithout1,1,1))&str_detect(i,str_sub(fourwithout1,2,2)))){
+      newrow[which(newrow == i)] = 0
+      newrow[0] = i
+    }
+    else if (str_detect(i,str_sub(newrow[1],1,1))&str_detect(i,str_sub(newrow[1],2,2))){
+      newrow[which(newrow == i)] = 9
+      newrow[9] = i
+    }
+    else {
+      newrow[which(newrow == i)] = 6
+      newrow[6] = i
+    }}
+  }
+  return(newrow)
+}
+test <- findLength6(test)
+
+as.numeric(str_c(test[22],test[23],test[24],test[25]))
+```
+
+```{r}
+listOfOutputs = c()
+for (i in 1:200){
+  test <- findLength6(findLength5(findEasy(df8[i,])))
+  listOfOutputs <- append(listOfOutputs,as.numeric(str_c(test[22],test[23],test[24],test[25])))
+}
+sum(listOfOutputs)
+
+```
