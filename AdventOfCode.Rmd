@@ -727,3 +727,106 @@ for (i in 1:200){
 sum(listOfOutputs)
 
 ```
+
+## Day 9 Find Minimum Around
+```{r}
+df9 <- read.csv("Day9Input",header = F,colClasses = "character" )
+options("scipen"=100, "digits"=4)
+df9[1,1]
+```
+
+```{r}
+convertToString <- function(row){
+  row <- toString(row)
+  return(row)
+}
+
+normalCase <- function(row1,row2,row3){
+  newlist =c()
+  for (i in 2:(str_length(row2)-1)){
+    val <- strtoi(str_sub(row2,i,i))
+    above <- strtoi(str_sub(row1,i,i))
+    below <- strtoi(str_sub(row3,i,i))
+    left <- strtoi(str_sub(row2,i-1,i-1))
+    right <- strtoi(str_sub(row2, i+1,i+1))
+    if ((val<above)&(val<below)&(val<left)&(val<right)){
+      newlist <- append(newlist,val)
+    }
+  }
+  return(newlist)
+}
+
+normalCase(df9[1,1],df9[2,1],df9[3,1])
+```
+6319898921234589878923987653129892349989949212347892398765498765423456789469884326789923468998997890
+```{r}
+topBottom <- function(row,reference){
+  newlist =c()
+  for (i in 2:(str_length(row)-1)){
+    val <- strtoi(str_sub(row,i,i))
+    above <- strtoi(str_sub(reference,i,i))
+    left <- strtoi(str_sub(row,i-1,i-1))
+    right <- strtoi(str_sub(row, i+1,i+1))
+    if ((val<above)&(val<left)&(val<right)){
+      newlist <- append(newlist,val)
+    }}
+  for (i in c(1,str_length(row))){
+    if (i==1){
+      val <- strtoi(str_sub(row,i,i))
+      nextto <- strtoi(str_sub(row,i+1,i+1))
+      above <- strtoi(str_sub(reference,i,i))
+      if ((val<above)&(val<nextto)){
+        newlist <- append(newlist,val)
+    }
+    }
+    else {
+      val <- strtoi(str_sub(row,i,i))
+      nextto <- strtoi(str_sub(row,i-1,i-1))
+      above <- strtoi(str_sub(reference,i,i))
+      if ((val<above)&(val<nextto)){
+        newlist <- append(newlist,val)
+    }}
+  }
+  return(newlist)
+}
+
+topBottom(df9[1,1],df9[2,1])
+```
+
+```{r}
+leftRight <- function(row1,row2,row3){
+  newlist =c()
+  for (i in c(1,str_length(row2))){
+    val <- strtoi(str_sub(row2,i,i))
+    above <- strtoi(str_sub(row1,i,i))
+    below <- strtoi(str_sub(row3,i,i))
+    if (i == 1){
+      nextto <- strtoi(str_sub(row2,i+1,i+1))
+    }
+    else {
+      nextto <- strtoi(str_sub(row2,i-1,i-1))
+    }
+    if ((val<above)&(val<below)&(val<nextto)){
+      newlist <- append(newlist,val)
+    }
+  }
+  return(newlist)
+}
+
+leftRight(df9[1,1],df9[2,1],df9[3,1])
+```
+
+```{r}
+finalList = c()
+
+for (i in 2:99){
+  finalList <- append(finalList,normalCase(df9[i-1,1],df9[i,1],df9[i+1,1]))
+  finalList <- append(finalList,leftRight(df9[i-1,1],df9[i,1],df9[i+1,1]))
+}
+finalList
+finalList <- append(finalList,topBottom(df9[1,1],df9[2,1]))
+finalList <- append(finalList,topBottom(df9[100,1],df9[99,1]))
+finalList
+sum(finalList+1)
+
+```
