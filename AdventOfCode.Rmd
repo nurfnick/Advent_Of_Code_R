@@ -830,3 +830,33 @@ finalList
 sum(finalList+1)
 
 ```
+
+For the second part of today's challenge, I need to find the size of each of the basins.  Each number (except 9) will belong to one basin and 9 will mark the boundary.  I think I am going to find the smallest, run right and left grabbing all the numbers that are not 9 in a row.  Then I'll move down (I'll start at the top!) find any below the right to left that are not 9 and repeat.  I don't think I need the above code.
+
+```{r}
+leftToRight <- function(row,position){
+  i = position
+  sinkrow = c(position)
+  while(strtoi(str_sub(row,i+1,i+1))!=9){
+    i = i+1
+    sinkrow <- append(sinkrow,i)
+  }
+  return(sinkrow)
+}
+
+leftToRight(df9[1,1],1)
+```
+```{r}
+checkBelow <- function(row,listOfPositions){
+  sinkrow = c()
+  for (i in listOfPositions){
+    while(strtoi(str_sub(row,i,i))!=9){
+      sinkrow <- append(sinkrow,i)
+      i = i+1
+    }
+  }
+  return(unique(sinkrow))
+}
+
+checkBelow(df9[2,1],c(1,2,3,4))
+```
