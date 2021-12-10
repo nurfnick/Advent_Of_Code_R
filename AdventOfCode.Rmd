@@ -860,3 +860,12 @@ checkBelow <- function(row,listOfPositions){
 
 checkBelow(df9[2,1],c(1,2,3,4))
 ```
+
+```{r}
+getPositionsNot9 <- function(row){
+  row <- str_extract_all(df9[1,1],"")
+  return(which(row[[1]] != "9"))
+}
+
+getPositionsNot9(df9[1,1])
+```
