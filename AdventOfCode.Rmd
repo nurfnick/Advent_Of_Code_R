@@ -873,46 +873,56 @@ getPositionsNot9(df9[1,1])
 I am going to try a different approach.  I'll start somewhere (probably a sink) and move around until I hit all the points not 9 adding them to a list.
 ```{r}
 checkValue <- function(stringnumber,x,y,df){
-  d <- data.frame('row'=x,'column' = y,'checked' = TRUE)
-  if((stringnumber != "9")&(!all(d == df))){
-    return(TRUE)
-  }
+  if(stringnumber != "9"){
+    if(!any((df['row'] == x) & (df['column'] == y))){
+      return(TRUE)
+  }}
   else {return(FALSE)}
 }
 
 
 lookAround <- function(alltheData, startingpoint){
-  df <- data.frame('row'=c(startingpoint[1]),'column' = c(startingpoint[2]),'checked' = c(FALSE))
-  while(any(df$checked == FALSE)){
-    row <- df[df$checked == FALSE][1,1]
-    column <- df[df$checked == FALSE][1,2]
+  df <- data.frame('row'=startingpoint[1],'column' = startingpoint[2],'checked' = FALSE)
+  while(any(df['checked'] == FALSE)){
+    row <- df[df['checked'] == FALSE,][1,1]
+    column <- df[df['checked'] == FALSE,][1,2]
+    df[df['checked'] == FALSE,][1,3] = TRUE
+    try({
     right <- str_sub(alltheData[row,1],column+1,column+1)
     if (checkValue(right,row,column+1,df)){
       df <- df %>% add_row('row' = row, 'column' = column+1,'checked' = FALSE)
-    }
+    }})
+    
     try({
     left <- str_sub(alltheData[row,1],column-1,column-1)
     if (checkValue(left,row,column-1,df)){
       df <- df %>% add_row('row' = row, 'column' = column-1,'checked' = FALSE)
     }})
+    
     try({
     up <- str_sub(alltheData[row-1,1],column,column)
     if (checkValue(right,row-1,column,df)){
       df <- df %>% add_row('row' = row-1, 'column' = column,'checked' = FALSE)
     }})
+    
     try({
     down <- str_sub(alltheData[row+1,1],column,column)
     if (checkValue(right,row+1,column,df)){
       df <- df %>% add_row('row' = row+1, 'column' = column,'checked' = FALSE)
     }})
-    df[df$checked == FALSE][1,3] = TRUE
   }
   return(df)
 }
 
-
-
 lookAround(df9,c(15,13))
 
+dd <- lookAround(df9,c(15,13))
+dd[(dd['checked']==TRUE)]
 
+dd
+dd1 <- data.frame("row" = c(15,14,13),"column" = c(13,12,11),"checked" = c(TRUE,FALSE,TRUE))
+dd1 %in% dd
+checkValue("8",15,12,dd1)
+
+dd1[dd1$checked == TRUE,]
 ```
