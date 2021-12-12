@@ -910,19 +910,21 @@ lookAround <- function(alltheData, startingpoint){
     if (checkValue(right,row+1,column,df)){
       df <- df %>% add_row('row' = row+1, 'column' = column,'checked' = FALSE)
     }})
+    #return(df)
   }
   return(df)
 }
 
 lookAround(df9,c(15,13))
+```
 
-dd <- lookAround(df9,c(15,13))
-dd[(dd['checked']==TRUE)]
+```{r}
 
-dd
-dd1 <- data.frame("row" = c(15,14,13),"column" = c(13,12,11),"checked" = c(TRUE,FALSE,TRUE))
-dd1 %in% dd
 checkValue("8",15,12,dd1)
-
+column = 15
+df9[2,1]
+row
+str_sub(df9[15,1],column-1,column-1)
 dd1[dd1$checked == TRUE,]
+checkValue(str_sub(df9[15,1],column-1,column-1),15,12,dd1)
 ```
